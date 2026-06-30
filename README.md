@@ -1,75 +1,83 @@
-# React + TypeScript + Vite
+# Expense Requests Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An internal expense-request tool: employees file requests, the server routes
+them to the right approver based on amount, and managers/finance approve or
+reject them. Requests start as drafts, are validated on submit, and move through
+an append-only event log from which their status is always derived.
 
-Currently, two official plugins are available:
+It's a full-stack demo — a React 19 + Vite client talking to an Express 5 API
+over a small REST surface — with no database (data lives in memory, seeded from
+`data/*.json`). See [NOTES.md](./NOTES.md) for design decisions and tradeoffs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Highlights
 
-## React Compiler
+- **Conditional form** — fields appear/become required based on others (billable
+  → client, ≥ $1,000 → justification, type `Other` → reason).
+- **Server-side everything** — validation, approver routing, authorization, and
+  status all enforced on the server; the client mirrors validation only for UX.
+- **Multi-step approval chains** — small amounts need one sign-off; amounts
+  ≥ $1,000 need the manager **then** finance, in order.
+- **Accessible by hand** — keyboard-navigable grid (W3C APG grid pattern) and a
+  custom ARIA listbox dropdown; no UI/form/grid libraries.
+- **Tested** — full Vitest suite (client + server) including supertest route
+  integration and end-to-end flows.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+- **Client:** React 19, React Router v7, Vite, TypeScript (strict)
+- **Server:** Express 5, TypeScript (strict), in-memory stores
+- **Tests:** Vitest, @testing-library/react, supertest
+- **Auth:** simulated via an `X-User-Id` header (no real auth)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project structure
 
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+expense-requests-tool/
+├── data/                 # seed data (users.json, requests.json)
+├── server/               # Express API
+│   ├── models/           #   types + validation (no side effects)
+│   ├── store/            #   in-memory data access
+│   ├── services/         #   business logic (routing, lifecycle, authz)
+│   ├── routes/           #   thin HTTP layer
+│   ├── middleware/       #   auth, error handling, body checks
+│   └── __tests__/        #   service + supertest route tests
+├── src/                  # React client
+│   ├── api/              #   fetch wrappers
+│   ├── components/       #   UI by domain: form/ list/ request/ common/ layout/
+│   ├── pages/            #   route-level components
+│   ├── hooks/            #   data-fetching + state hooks
+│   ├── models/           #   shared client types + helpers
+│   ├── validation/       #   client mirror of server validation
+│   ├── styles/           #   single styles.css (BEM)
+│   └── __tests__/        #   component, hook, and e2e tests
+├── NOTES.md              # design decisions and tradeoffs
+└── ai-prompts/           # AI usage notes
 ```
+
+In development, Vite serves the client on port 5173 and proxies `/api` to the
+Express server on port 3001.
+
+## Getting started
+
+```bash
+npm install
+npm run dev
+```
+
+`npm run dev` starts the Vite dev server and the Express API concurrently. Open
+the printed local URL (http://localhost:5173) in a browser.
+
+## npm commands
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the client (Vite, :5173) and server (Express, :3001) together |
+| `npm run build` | Type-check + build the client and compile the server to `dist/` |
+| `npm run preview` | Preview the production client build locally |
+| `npm test` | Run the full test suite once (client + server) |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:client` | Run only the client (jsdom) tests |
+| `npm run test:server` | Run only the server (node) tests |
+| `npm run lint` | Lint all `.ts`/`.tsx` files |
+| `npm run lint:fix` | Lint and auto-fix |
+| `npm run format` | Format with Prettier |
