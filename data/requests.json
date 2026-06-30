@@ -1,0 +1,68 @@
+[
+  {
+    "id": "REQ-001",
+    "requesterId": "u_alice",
+    "values": {
+      "expenseType": "Travel",
+      "amountCents": 45000,
+      "description": "Flight to NYC for client meeting",
+      "billable": true,
+      "client": "Acme",
+      "destination": "New York, NY",
+      "travelStartDate": "2026-07-10",
+      "travelEndDate": "2026-07-12"
+    },
+    "events": [
+      { "type": "created", "at": "2026-06-20T09:00:00Z", "actorId": "u_alice" },
+      { "type": "updated", "at": "2026-06-20T09:30:00Z", "actorId": "u_alice" }
+    ]
+  },
+  {
+    "id": "REQ-002",
+    "requesterId": "u_dave",
+    "values": {
+      "expenseType": "Software",
+      "amountCents": 79900,
+      "description": "Annual license for design tool",
+      "billable": false,
+      "vendor": "Figma",
+      "vendorReason": "Required for UI/UX work across all projects"
+    },
+    "events": [
+      { "type": "created", "at": "2026-06-22T10:00:00Z", "actorId": "u_dave" },
+      { "type": "submitted", "at": "2026-06-22T10:15:00Z", "actorId": "u_dave", "approverId": "u_bob" }
+    ]
+  },
+  {
+    "id": "REQ-003",
+    "requesterId": "u_alice",
+    "values": {
+      "expenseType": "Meal",
+      "amountCents": 12500,
+      "description": "Team lunch after project retrospective",
+      "billable": true,
+      "client": "Globex"
+    },
+    "events": [
+      { "type": "created", "at": "2026-06-15T12:00:00Z", "actorId": "u_alice" },
+      { "type": "submitted", "at": "2026-06-15T12:10:00Z", "actorId": "u_alice", "approverId": "u_bob" },
+      { "type": "approved", "at": "2026-06-16T09:00:00Z", "actorId": "u_bob", "comment": "Approved, looks good." }
+    ]
+  },
+  {
+    "id": "REQ-004",
+    "requesterId": "u_dave",
+    "values": {
+      "expenseType": "Equipment",
+      "amountCents": 149900,
+      "description": "External monitor for home office setup",
+      "billable": false,
+      "additionalJustification": "Current setup causes eye strain and reduces productivity significantly. Required for accessibility compliance."
+    },
+    "events": [
+      { "type": "created", "at": "2026-06-18T14:00:00Z", "actorId": "u_dave" },
+      { "type": "submitted", "at": "2026-06-18T14:30:00Z", "actorId": "u_dave", "approverId": "u_carol" },
+      { "type": "rejected", "at": "2026-06-19T10:00:00Z", "actorId": "u_carol", "comment": "Budget freeze on equipment purchases until Q3. Please resubmit in July." }
+    ]
+  }
+]

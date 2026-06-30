@@ -1,0 +1,8 @@
+[
+  { "id": "u_alice", "name": "Alice Chen", "role": "employee", "managerId": "u_bob" },
+  { "id": "u_bob", "name": "Bob Martinez", "role": "manager", "managerId": null },
+  { "id": "u_carol", "name": "Carol Finance", "role": "finance", "managerId": null },
+  { "id": "u_dave", "name": "Dave Wilson", "role": "employee", "managerId": "u_bob" },
+  { "id": "u_eve", "name": "Eve Thompson", "role": "manager", "managerId": null },
+  { "id": "u_frank", "name": "Frank Lee", "role": "employee", "managerId": "u_eve" }
+]
