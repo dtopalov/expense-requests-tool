@@ -232,10 +232,9 @@ input, textarea, select, button { border-radius: var(--radius); }
 .grid__row:last-child { border-bottom: none; }
 .grid__row--header { background: var(--color-surface); }
 .grid__row:not(.grid__row--header):hover { background: var(--color-surface); }
-.grid__cell { padding: var(--space-3) var(--space-4); font-size: var(--font-size-sm); display: flex; align-items: center; }
+.grid__cell { padding: var(--space-3) var(--space-4); font-size: var(--font-size-sm); vertical-align: middle; }
 .grid__cell:focus { outline: 2px solid var(--color-primary); outline-offset: -2px; }
-.grid__cell--action { justify-content: flex-start; }
-.grid__header { font-weight: 600; font-size: var(--font-size-sm); gap: var(--space-1); }
+.grid__header { font-weight: 600; font-size: var(--font-size-sm); }
 .grid__header--sortable { cursor: pointer; user-select: none; }
 .grid__sort-icon { font-size: 0.7em; }
 .grid__details-btn {

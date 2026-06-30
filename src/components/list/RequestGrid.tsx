@@ -10,7 +10,7 @@ const DATA_COLUMNS = [
   { key: 'expenseType', label: 'Type', sortable: true, width: '130px' },
   { key: 'amountCents', label: 'Amount', sortable: true, width: '110px' },
   { key: 'description', label: 'Description', sortable: true },
-  { key: 'status', label: 'Status', sortable: true, width: '110px' }
+  { key: 'status', label: 'Status', sortable: true, width: '150px' }
 ];
 
 // Last col is the Details action column
