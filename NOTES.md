@@ -54,8 +54,7 @@ Layer responsibilities:
 
 - **Server**: Vitest 4 in Node environment. Route integration tests use `supertest`. Service unit tests directly call service functions with in-memory store.
 - **Client**: Vitest 4 in jsdom environment. Component tests use `@testing-library/react`. E2E tests render full router trees with `createMemoryRouter` and `initialEntries` to land directly at the target URL without programmatic navigation.
-- **Fetch mocking**: `vi.stubGlobal('fetch', mockFetch)` with a hand-written mock in `src/test/mock-fetch.ts`. No MSW — avoids the react-router v7 / jsdom / undici `AbortSignal` incompatibility that arises when MSW intercepts internal router fetches.
-- **Known env quirk**: react-router v7 calls `new Request(url, { signal })` using undici's `Request` class, but jsdom's `AbortController` produces a jsdom `AbortSignal`, not an undici one. This causes an unhandled rejection after any programmatic navigation. Suppressed in `src/test/setup.ts` via `process.on('unhandledRejection')` — it does not affect test correctness.
+- **Fetch mocking**: `vi.stubGlobal('fetch', mockFetch)` with a hand-written mock in `src/test/mock-fetch.ts` (no MSW — the in-process mock keeps the test setup small and dependency-free).
 
 ## Running Locally
 
