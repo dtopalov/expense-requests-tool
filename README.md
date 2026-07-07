@@ -42,8 +42,9 @@ expense-requests-tool/
 │   ├── middleware/       #   auth, error handling, body checks
 │   └── __tests__/        #   service + supertest route tests
 ├── src/                  # React client
-│   ├── api/              #   fetch wrappers
+│   ├── api/              #   fetch wrappers (in-memory X-User-Id, no localStorage)
 │   ├── components/       #   UI by domain: form/ list/ request/ common/ layout/
+│   ├── context/          #   AuthContext (simulated login / user switching)
 │   ├── pages/            #   route-level components
 │   ├── hooks/            #   data-fetching + state hooks
 │   ├── models/           #   shared client types + helpers

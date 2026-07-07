@@ -22,14 +22,14 @@ Layer responsibilities:
 
 ### Client (`src/`)
 
-- **React 19** with **React Router v7** (declarative component routes defined in `App.tsx`)
+- **React 19** with **React Router v7** data router (`createBrowserRouter` + `RouterProvider` in `App.tsx`); page components are code-split with `lazy`/`Suspense`
 - **AuthContext** manages current user; simulates login via a user-switcher in the nav
 - All amounts stored as **whole cents** (integer); formatted to display as dollars only in UI
 - **Controlled form components** throughout; no form library
 - **BEM class names** in a single `src/styles/styles.css` file
 
 Layer responsibilities:
-- `api/` — fetch wrappers (sets `X-User-Id` header from stored userId)
+- `api/` — fetch wrappers (sets `X-User-Id` header from the current userId held in an in-memory module variable in `api/client.ts`)
 - `hooks/` — data-fetching and state (useRequests, useRequest)
 - `components/` — reusable UI split by domain: `form/`, `list/`, `request/`, `common/`, `layout/`
 - `pages/` — route-level components; thin, delegate to hooks and components
@@ -40,7 +40,7 @@ Layer responsibilities:
 
 **Cents for money.** Storing `amountCents: number` (integer) avoids floating-point errors and makes comparisons exact. The `$1000 → finance` threshold is `amountCents >= 100000`.
 
-**No real auth.** `X-User-Id` header is set by the client from `localStorage`. The server validates it against the user store. This is sufficient for a demo; a real app would use sessions or JWTs.
+**No real auth.** The `X-User-Id` header is set by the client from an in-memory module variable (`currentUserId` in `api/client.ts`), updated whenever the user switches identity via the nav's `UserPicker`. Nothing is persisted — a page reload resets the current user to the first user returned by the API. The server validates the header against the user store. This is sufficient for a demo; a real app would use sessions or JWTs.
 
 **Server is authoritative.** Client mirrors some validation for UX (e.g. showing the justification field when amount ≥ $1000) but all rules are re-enforced server-side. Server errors always win.
 
