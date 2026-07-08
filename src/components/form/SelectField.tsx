@@ -120,7 +120,7 @@ export function SelectField({
       const list = listRef.current;
 
       if (!trigger?.contains(e.target as Node) && !list?.contains(e.target as Node)) {
-        closeList();
+        closeListSilent();
       }
     }
 

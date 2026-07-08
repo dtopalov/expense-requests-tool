@@ -101,6 +101,26 @@ describe('SelectField', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
+  it('closes on outside click without stealing focus back to the trigger', async () => {
+    render(
+      <>
+        <SelectField id="sel" label="Pick one" value="" onChange={() => {}} options={options} />
+        <button type="button">Outside</button>
+      </>
+    );
+    const trigger = screen.getByRole('button', { name: /Pick one/i });
+    await userEvent.click(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    const outside = screen.getByRole('button', { name: 'Outside' });
+    outside.focus();
+    fireEvent.mouseDown(outside);
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(trigger).not.toHaveFocus();
+    expect(outside).toHaveFocus();
+  });
+
   it('trigger button has tabIndex 0 for Safari tab support', () => {
     render(
       <SelectField id="sel" label="Pick one" value="" onChange={() => {}} options={options} />
