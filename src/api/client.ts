@@ -1,7 +1,10 @@
-let currentUserId = '';
+const USER_ID_STORAGE_KEY = 'expense-requests.currentUserId';
+
+let currentUserId = localStorage.getItem(USER_ID_STORAGE_KEY) ?? '';
 
 export function setCurrentUserId(id: string): void {
   currentUserId = id;
+  localStorage.setItem(USER_ID_STORAGE_KEY, id);
 }
 
 export function getCurrentUserId(): string {

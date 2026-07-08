@@ -371,21 +371,6 @@ input, textarea, select, button { border-radius: var(--radius); }
 .toast__dismiss { background: none; border: none; padding: 0; opacity: 0.6; font-size: var(--font-size-base); line-height: 1; }
 .toast__dismiss:hover { opacity: 1; }
 
-/* Modal */
-.modal {
-  border: none; border-radius: var(--radius); box-shadow: var(--shadow-lg);
-  max-width: 500px; width: 90%; padding: 0;
-}
-.modal::backdrop { background: rgba(0,0,0,0.4); }
-.modal__content { display: flex; flex-direction: column; }
-.modal__header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: var(--space-4) var(--space-6);
-  border-bottom: 1px solid var(--color-border);
-}
-.modal__title { font-size: var(--font-size-xl); }
-.modal__body { padding: var(--space-6); }
-
 /* Pages */
 .page { padding: var(--space-2); }
 .page__title { margin-bottom: var(--space-6); }

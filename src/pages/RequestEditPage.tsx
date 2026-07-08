@@ -39,9 +39,9 @@ export default function RequestEditPage(): React.ReactElement {
     return updateRequest(request!.id, values);
   }
 
-  async function handleSubmit(reqId: string): Promise<void> {
+  async function handleSubmit(reqId: string, values: RequestValues, note?: string): Promise<void> {
     if (isRejected) {
-      await resubmitRequest(reqId, request!.values);
+      await resubmitRequest(reqId, values, note);
     } else {
       await submitRequest(reqId);
     }
@@ -54,6 +54,7 @@ export default function RequestEditPage(): React.ReactElement {
       </h1>
       <RequestForm
         mode="edit"
+        resubmit={isRejected}
         initialValues={request.values}
         requestId={request.id}
         onSave={handleSave}

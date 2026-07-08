@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RequestForm } from '../../../components/request/RequestForm.tsx';
+import type { RequestValues } from '../../../models/request.ts';
 
 vi.mock('react-router', () => ({
   useNavigate: () => vi.fn()
@@ -56,6 +57,34 @@ describe('RequestForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /expense type/i }));
     await userEvent.click(screen.getByText('Travel'));
     expect(screen.getByLabelText(/destination/i)).toBeInTheDocument();
+  });
+
+  it('does not show the resubmit note field outside resubmit mode', () => {
+    render(<RequestForm mode="edit" requestId="REQ-001" onSave={noop} onSubmit={noopSubmit} />);
+    expect(screen.queryByLabelText(/what did you fix/i)).not.toBeInTheDocument();
+  });
+
+  it('forwards the edited values and resubmit note to onSubmit', async () => {
+    const onSubmit = vi.fn(async (_id: string, _values: RequestValues, _note?: string) => {});
+    const initialValues: RequestValues = {
+      description: 'Rejected desc',
+      amountCents: 5000,
+      expenseType: 'Meal',
+      billable: false
+    };
+    render(
+      <RequestForm
+        mode="edit"
+        resubmit
+        requestId="REQ-001"
+        initialValues={initialValues}
+        onSave={noop}
+        onSubmit={onSubmit}
+      />
+    );
+    await userEvent.type(screen.getByLabelText(/what did you fix/i), 'Corrected the amount');
+    await userEvent.click(screen.getByRole('button', { name: /submit for approval/i }));
+    expect(onSubmit).toHaveBeenCalledWith('REQ-001', initialValues, 'Corrected the amount');
   });
 
   it('populates initial values in edit mode', () => {

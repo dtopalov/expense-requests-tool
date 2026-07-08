@@ -21,8 +21,9 @@ interface RequestFormProps {
   initialValues?: RequestValues;
   requestId?: string;
   onSave: (values: RequestValues) => Promise<{ id: string }>;
-  onSubmit: (id: string) => Promise<unknown>;
+  onSubmit: (id: string, values: RequestValues, note?: string) => Promise<unknown>;
   mode: 'create' | 'edit';
+  resubmit?: boolean;
 }
 
 export function RequestForm({
@@ -30,10 +31,12 @@ export function RequestForm({
   requestId,
   onSave,
   onSubmit,
-  mode
+  mode,
+  resubmit = false
 }: RequestFormProps): React.ReactElement {
   const [values, setValues] = useState<RequestValues>(initialValues);
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -94,7 +97,7 @@ export function RequestForm({
         id = saved.id;
       }
 
-      await onSubmit(id);
+      await onSubmit(id, values, resubmit ? note : undefined);
 
       showToast('Request submitted for approval.', 'success');
       void navigate(`/${id}`);
@@ -279,6 +282,19 @@ export function RequestForm({
             />
           </div>
         </>
+      )}
+
+      {resubmit && (
+        <div className="request-form__field">
+          <TextAreaField
+            id="resubmitNote"
+            label="What did you fix?"
+            value={note}
+            onChange={setNote}
+            hint="Describe the changes you made before resubmitting."
+            placeholder="e.g. Added the missing justification and corrected the amount"
+          />
+        </div>
       )}
 
       <div className="request-form__actions">

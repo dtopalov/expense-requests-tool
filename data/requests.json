@@ -61,7 +61,8 @@
     },
     "events": [
       { "type": "created", "at": "2026-06-18T14:00:00Z", "actorId": "u_dave" },
-      { "type": "submitted", "at": "2026-06-18T14:30:00Z", "actorId": "u_dave", "approverId": "u_carol" },
+      { "type": "submitted", "at": "2026-06-18T14:30:00Z", "actorId": "u_dave", "approverId": "u_bob", "approverChain": ["u_bob", "u_carol"] },
+      { "type": "step-approved", "at": "2026-06-18T16:45:00Z", "actorId": "u_bob", "approverId": "u_carol" },
       { "type": "rejected", "at": "2026-06-19T10:00:00Z", "actorId": "u_carol", "comment": "Budget freeze on equipment purchases until Q3. Please resubmit in July." }
     ]
   }
